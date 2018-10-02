@@ -1,23 +1,19 @@
 variable "cluster-name" {
-  default     = "default-cluster"
-  description = "Cluster name"
   type        = "string"
+  description = "Cluster name"
 }
 
 variable "desiered-nodes" {
-  default     = 6
   type        = "string"
   description = "Desirered amount of nodes in the cluster auto scaling group"
 }
 
 variable "max-nodes" {
-  default     = 10
   type        = "string"
   description = "Maximum amount of nodes in the cluster auto scaling group"
 }
 
 variable "min-nodes" {
-  default     = 3
   type        = "string"
   description = "Minimum amount of nodes in the cluster auto scaling group"
 }
