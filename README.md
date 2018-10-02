@@ -13,8 +13,10 @@ Terraform module which creates a EKS cluster on AWS.
 
 ### Setup
 
-1. Apply terraform - create cluster (usually slow, i.e. 10+ mins.)
+1. Apply terraform config - create cluster (usually slow, i.e. 10+ mins.)
+    * [Example config](examples/default/example.tf)
 2. Save `kubeconfig` output from terraform somewhere (default kubeconfig location: `~/.kube/config`).
+
     ```sh
     terraform output kubeconfig
     ```
@@ -23,16 +25,22 @@ Terraform module which creates a EKS cluster on AWS.
     export KUBECONFIG=~./custom/location
     kubectl get nodes # works
     ```
+
 3. Confirm connection towards the cluster:
+
     ```sh
     kubectl get nodes # should return `no resources`
     ```
+
 4. Save and apply `config-map-aws-auth` output from terraform:
+
     ```sh
     terraform output config-map-aws-auth # save as auth-config.yml
     kubectl apply -f auth-config.yml
     ```
+
 5. Confirm that nodes have joined/are joining the cluster
+
     ```sh
     kubectl get nodes # should a list of nodes
     ```
