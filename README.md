@@ -42,7 +42,7 @@ Terraform module which creates a EKS cluster on AWS.
 5. Confirm that nodes have joined/are joining the cluster
 
     ```sh
-    kubectl get nodes # should a list of nodes
+    kubectl get nodes # should show a list of nodes
     ```
 
 ### Note
