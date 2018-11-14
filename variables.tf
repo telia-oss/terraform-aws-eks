@@ -3,6 +3,17 @@ variable "cluster-name" {
   description = "Cluster name"
 }
 
+variable "vpc-id" {
+  type        = "string"
+  description = "VPC ID"
+}
+
+// https://docs.aws.amazon.com/eks/latest/userguide/platform-versions.html
+variable "kubernetes-version" {
+  default     = ""                   // If empty, will use the newest
+  description = "Kubernetes version"
+}
+
 variable "desiered-nodes" {
   type        = "string"
   description = "Desirered amount of nodes in the cluster auto scaling group"

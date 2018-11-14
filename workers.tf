@@ -42,7 +42,7 @@ resource "aws_iam_instance_profile" "eks-worker" {
 resource "aws_security_group" "eks-worker" {
   name        = "${var.cluster-name}-eks-worker"
   description = "Security group for all nodes in the cluster"
-  vpc_id      = "${aws_vpc.eks-vpc.id}"
+  vpc_id      = "${var.vpc-id}"
 
   egress {
     from_port   = 0

@@ -26,6 +26,11 @@ Terraform module which creates a EKS cluster on AWS.
     kubectl get nodes # works
     ```
 
+    You can also use the [aws cli](https://docs.aws.amazon.com/cli/latest/reference/eks/update-kubeconfig.html):
+    ```sh
+    aws eks update-kubeconfig --name <cluster-name>
+    ```
+
 3. Confirm connection towards the cluster:
 
     ```sh
