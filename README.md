@@ -49,7 +49,7 @@ Terraform module which creates a EKS cluster on AWS.
 4. Save and apply `config-map-aws-auth` output from terraform:
 
     ```sh
-    terraform output config-map-aws-auth # save as auth-config.yml
+    terraform output config_map_aws_auth # save as auth-config.yml
     kubectl apply -f auth-config.yml
     ```
 
