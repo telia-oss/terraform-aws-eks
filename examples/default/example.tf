@@ -31,5 +31,5 @@ output "kubeconfig" {
 }
 
 output "config-map-aws-auth" {
-  value = "${module.eks.config-map-aws-auth}"
+  value = "${module.eks.config_map_aws_auth}"
 }
