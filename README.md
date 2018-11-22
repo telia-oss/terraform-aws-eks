@@ -15,6 +15,7 @@ Terraform module which creates a EKS cluster on AWS.
 
 1. Apply terraform config - create cluster (usually slow, i.e. 10+ mins.)
     * [Example config](examples/default/example.tf)
+
 2. Save `kubeconfig` output from terraform somewhere (default kubeconfig location: `~/.kube/config`).
 
     ```sh
@@ -36,6 +37,14 @@ Terraform module which creates a EKS cluster on AWS.
     ```sh
     kubectl get nodes # should return `no resources`
     ```
+
+    ### Note
+
+    When you create an Amazon EKS cluster, the IAM entity user or role (for example, for federated users) that creates the cluster is automatically granted system:master permissions in the cluster's RBAC configuration. 
+
+    I.e if your cluster is created by a machine user role (e.g. as a part of a CI/CD task), you will need to assume this role to establish initial connection towards the cluster.
+
+    More info [here](https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html).
 
 4. Save and apply `config-map-aws-auth` output from terraform:
 

@@ -1,6 +1,6 @@
 ### EKS Master Cluster IAM Role
 resource "aws_iam_role" "eks-master" {
-  name = "${var.cluster-name}-eks-master"
+  name = "${var.cluster_name}-eks-master"
 
   assume_role_policy = <<POLICY
 {
@@ -30,9 +30,9 @@ resource "aws_iam_role_policy_attachment" "eks-master-AmazonEKSServicePolicy" {
 
 ### EKS Master Cluster Security Group
 resource "aws_security_group" "eks-master" {
-  name        = "${var.cluster-name}-eks-master"
+  name        = "${var.cluster_name}-eks-master"
   description = "Cluster communication with worker nodes"
-  vpc_id      = "${var.vpc-id}"
+  vpc_id      = "${var.vpc_id}"
 
   egress {
     from_port   = 0
@@ -42,7 +42,7 @@ resource "aws_security_group" "eks-master" {
   }
 
   tags {
-    Name = "${var.cluster-name}-eks-master"
+    Name = "${var.cluster_name}-eks-master"
   }
 }
 
@@ -58,9 +58,9 @@ resource "aws_security_group_rule" "eks-master-ingress-workstation-https" {
 
 ### EKS Master Cluster
 resource "aws_eks_cluster" "eks-master" {
-  name     = "${var.cluster-name}"
+  name     = "${var.cluster_name}"
   role_arn = "${aws_iam_role.eks-master.arn}"
-  version  = "${var.kubernetes-version}"
+  version  = "${var.kubernetes_version}"
 
   vpc_config {
     security_group_ids = ["${aws_security_group.eks-master.id}"]

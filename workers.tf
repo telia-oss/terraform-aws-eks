@@ -1,6 +1,6 @@
 ### Worker Node IAM Role and Instance Profile
 resource "aws_iam_role" "eks-worker" {
-  name = "${var.cluster-name}-eks-worker"
+  name = "${var.cluster_name}-eks-worker"
 
   assume_role_policy = <<POLICY
 {
@@ -34,15 +34,15 @@ resource "aws_iam_role_policy_attachment" "eks-worker-AmazonEC2ContainerRegistry
 }
 
 resource "aws_iam_instance_profile" "eks-worker" {
-  name = "${var.cluster-name}-eks-worker"
+  name = "${var.cluster_name}-eks-worker"
   role = "${aws_iam_role.eks-worker.name}"
 }
 
 ### Worker Node security groups
 resource "aws_security_group" "eks-worker" {
-  name        = "${var.cluster-name}-eks-worker"
+  name        = "${var.cluster_name}-eks-worker"
   description = "Security group for all nodes in the cluster"
-  vpc_id      = "${var.vpc-id}"
+  vpc_id      = "${var.vpc_id}"
 
   egress {
     from_port   = 0
@@ -53,8 +53,8 @@ resource "aws_security_group" "eks-worker" {
 
   tags = "${
     map(
-     "Name", "${var.cluster-name}-eks-worker",
-     "kubernetes.io/cluster/${var.cluster-name}", "owned",
+     "Name", "${var.cluster_name}-eks-worker",
+     "kubernetes.io/cluster/${var.cluster_name}", "owned",
     )
   }"
 }
@@ -106,7 +106,7 @@ locals {
 #!/bin/bash
 set -o xtrace
 
-/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks-master.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks-master.certificate_authority.0.data}' '${var.cluster-name}'
+/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks-master.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks-master.certificate_authority.0.data}' '${var.cluster_name}'
 USERDATA
 }
 
@@ -114,7 +114,7 @@ resource "aws_launch_configuration" "eks-worker-cluster" {
   associate_public_ip_address = true
   iam_instance_profile        = "${aws_iam_instance_profile.eks-worker.name}"
   image_id                    = "${data.aws_ami.eks-worker-ami.id}"
-  instance_type               = "${var.node-instance-type}"
+  instance_type               = "${var.node_instance_type}"
   name_prefix                 = "eks-cluster"
   security_groups             = ["${aws_security_group.eks-worker.id}"]
   user_data_base64            = "${base64encode(local.eks-node-userdata)}"
@@ -125,21 +125,21 @@ resource "aws_launch_configuration" "eks-worker-cluster" {
 }
 
 resource "aws_autoscaling_group" "eks-worker-cluster" {
-  desired_capacity     = "${var.desiered-nodes}"
-  max_size             = "${var.max-nodes}"
-  min_size             = "${var.min-nodes}"
+  desired_capacity     = "${var.desiered_nodes}"
+  max_size             = "${var.max_nodes}"
+  min_size             = "${var.min_nodes}"
   launch_configuration = "${aws_launch_configuration.eks-worker-cluster.id}"
-  name                 = "${var.cluster-name}-eks-cluster"
+  name                 = "${var.cluster_name}-eks-cluster"
   vpc_zone_identifier  = ["${aws_subnet.eks-subnet.*.id}"]
 
   tag {
     key                 = "Name"
-    value               = "${var.cluster-name}-eks-cluster"
+    value               = "${var.cluster_name}-eks-cluster"
     propagate_at_launch = true
   }
 
   tag {
-    key                 = "kubernetes.io/cluster/${var.cluster-name}"
+    key                 = "kubernetes.io/cluster/${var.cluster_name}"
     value               = "owned"
     propagate_at_launch = true
   }

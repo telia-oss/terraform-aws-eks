@@ -2,28 +2,28 @@ provider "aws" {
   region = "eu-west-1"
 }
 
-variable "cluster-name" {
-  default = "example-cluster"
+locals {
+  cluster_name = "example-cluster"
 }
 
-resource "aws_vpc" "eks-vpc" {
+resource "aws_vpc" "eks_vpc" {
   cidr_block = "10.0.0.0/16"
 
   tags = "${
     map(
-     "kubernetes.io/cluster/${var.cluster-name}", "shared",
+     "kubernetes.io/cluster/${local.cluster_name}", "shared",
     )
   }"
 }
 
 module "eks" {
   source             = "../.."
-  vpc-id             = "${aws_vpc.eks-vpc.id}"
-  cluster-name       = "${var.cluster-name}"
-  desiered-nodes     = "3"
-  max-nodes          = "6"
-  min-nodes          = "1"
-  node-instance-type = "m5.large"
+  vpc_id             = "${aws_vpc.eks_vpc.id}"
+  cluster_name       = "${local.cluster_name}"
+  desiered_nodes     = "3"
+  max_nodes          = "6"
+  min_nodes          = "1"
+  node_instance_type = "m5.large"
 }
 
 output "kubeconfig" {
