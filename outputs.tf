@@ -1,5 +1,5 @@
-output "config-map-aws-auth" {
-  value = <<CONFIGMAPAWSAUTH
+output "config_map_aws_auth" {
+  value = <<CONFIGMAP
 
 
 apiVersion: v1
@@ -9,12 +9,12 @@ metadata:
   namespace: kube-system
 data:
   mapRoles: |
-    - rolearn: ${aws_iam_role.eks-worker.arn}
+    - rolearn: ${aws_iam_role.eks-worker.arn != "" ? aws_iam_role.eks-worker.arn : ""}
       username: system:node:{{EC2PrivateDNSName}}
       groups:
         - system:bootstrappers
         - system:nodes
-CONFIGMAPAWSAUTH
+CONFIGMAP
 }
 
 output "kubeconfig" {
@@ -24,8 +24,8 @@ output "kubeconfig" {
 apiVersion: v1
 clusters:
 - cluster:
-    server: ${aws_eks_cluster.eks-master.endpoint}
-    certificate-authority-data: ${aws_eks_cluster.eks-master.certificate_authority.0.data}
+    server: ${aws_eks_cluster.eks-master.endpoint != "" ? aws_eks_cluster.eks-master.endpoint : ""}
+    certificate-authority-data: ${aws_eks_cluster.eks-master.certificate_authority.0.data != "" ? aws_eks_cluster.eks-master.certificate_authority.0.data : ""}
   name: kubernetes
 contexts:
 - context:
