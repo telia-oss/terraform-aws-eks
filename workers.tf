@@ -74,7 +74,7 @@ resource "aws_security_group_rule" "eks-worker-ingress-cluster" {
   from_port                = 1025
   protocol                 = "tcp"
   security_group_id        = "${aws_security_group.eks-worker.id}"
-  source_security_group_id = "${aws_security_group.eks-worker.id}"
+  source_security_group_id = "${aws_security_group.eks-master.id}"
   to_port                  = 65535
   type                     = "ingress"
 }
