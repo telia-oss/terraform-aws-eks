@@ -47,3 +47,19 @@ users:
         - "${var.cluster_name}"
 KUBECONFIG
 }
+
+output "eks_worker_iam_role" {
+  value = "${aws_iam_role.eks-worker.id}"
+}
+
+output "eks_worker_security_group" {
+  value = "${aws_security_group.eks-worker.id}"
+}
+
+output "eks_master_iam_role" {
+  value = "${aws_iam_role.eks-master.id}"
+}
+
+output "eks_master_security_group" {
+  value = "${aws_security_group.eks-master.id}"
+}
