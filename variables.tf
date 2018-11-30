@@ -8,6 +8,10 @@ variable "vpc_id" {
   description = "VPC ID"
 }
 
+variable "subnet_ids" {
+  type = "list"
+}
+
 // https://docs.aws.amazon.com/eks/latest/userguide/platform-versions.html
 variable "kubernetes_version" {
   default     = ""                   // If empty, will use the newest

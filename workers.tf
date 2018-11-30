@@ -130,7 +130,7 @@ resource "aws_autoscaling_group" "eks-worker-cluster" {
   min_size             = "${var.min_nodes}"
   launch_configuration = "${aws_launch_configuration.eks-worker-cluster.id}"
   name                 = "${var.cluster_name}-eks-cluster"
-  vpc_zone_identifier  = ["${aws_subnet.eks-subnet.*.id}"]
+  vpc_zone_identifier  = ["${var.subnet_ids}"]
 
   tag {
     key                 = "Name"
