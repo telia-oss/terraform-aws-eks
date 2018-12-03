@@ -13,23 +13,15 @@ Terraform module which creates a EKS cluster on AWS.
 
 ### Setup
 
+0. Have AWS access
+
 1. Apply terraform config - create cluster (usually slow, i.e. 10+ mins.)
     * [Example config](examples/default/example.tf)
 
-2. Save `kubeconfig` output from terraform somewhere (default kubeconfig location: `~/.kube/config`).
+2. Set your kubeconfig using the [aws cli](https://docs.aws.amazon.com/cli/latest/reference/eks/update-kubeconfig.html):
 
     ```sh
-    terraform output kubeconfig
-    ```
-    Custom locations for kubeconfig files can be set by setting the `KUBECONFIG` env var:
-    ```sh
-    export KUBECONFIG=~./custom/location
-    kubectl get nodes # works
-    ```
-
-    You can also use the [aws cli](https://docs.aws.amazon.com/cli/latest/reference/eks/update-kubeconfig.html):
-    ```sh
-    aws eks update-kubeconfig --name <cluster-name>
+    aws eks update-kubeconfig --name <cluster-name> # e.g example-cluster
     ```
 
 3. Confirm connection towards the cluster:

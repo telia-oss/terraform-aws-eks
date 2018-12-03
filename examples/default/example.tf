@@ -62,11 +62,3 @@ module "eks" {
   min_nodes          = "1"
   node_instance_type = "m5.large"
 }
-
-output "kubeconfig" {
-  value = "${module.eks.kubeconfig}"
-}
-
-output "config-map-aws-auth" {
-  value = "${module.eks.config_map_aws_auth}"
-}
