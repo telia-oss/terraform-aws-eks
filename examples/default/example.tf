@@ -62,3 +62,7 @@ module "eks" {
   min_nodes          = "1"
   node_instance_type = "m5.large"
 }
+
+output "eks_platform_version" {
+  value = "${module.eks.eks_platform_version}"
+}

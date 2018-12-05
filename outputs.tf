@@ -17,6 +17,10 @@ data:
 CONFIGMAP
 }
 
+output "eks_platform_version" {
+  value = "${aws_eks_cluster.eks-master.platform_version}"
+}
+
 output "eks_worker_iam_role" {
   value = "${aws_iam_role.eks-worker.id}"
 }
