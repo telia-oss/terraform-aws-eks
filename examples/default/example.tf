@@ -57,7 +57,7 @@ module "eks" {
   vpc_id             = "${aws_vpc.vpc.id}"
   subnet_ids         = ["${aws_subnet.public.*.id}"]
   cluster_name       = "${local.cluster_name}"
-  desiered_nodes     = "3"
+  desired_nodes     = "3"
   max_nodes          = "6"
   min_nodes          = "1"
   node_instance_type = "m5.large"
