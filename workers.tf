@@ -125,7 +125,7 @@ resource "aws_launch_configuration" "eks-worker-cluster" {
 }
 
 resource "aws_autoscaling_group" "eks-worker-cluster" {
-  desired_capacity     = "${var.desiered_nodes}"
+  desired_capacity     = "${var.desired_nodes}"
   max_size             = "${var.max_nodes}"
   min_size             = "${var.min_nodes}"
   launch_configuration = "${aws_launch_configuration.eks-worker-cluster.id}"
