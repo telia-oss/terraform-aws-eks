@@ -18,19 +18,19 @@ variable "kubernetes_version" {
   description = "Kubernetes version"
 }
 
-variable "desiered_nodes" {
+variable "desired_nodes" {
   type        = "string"
-  description = "Desirered amount of nodes in the cluster auto scaling group"
+  description = "Desired number of worker nodes in the cluster auto scaling group"
 }
 
 variable "max_nodes" {
   type        = "string"
-  description = "Maximum amount of nodes in the cluster auto scaling group"
+  description = "Maximum number of worker nodes in the cluster auto scaling group"
 }
 
 variable "min_nodes" {
   type        = "string"
-  description = "Minimum amount of nodes in the cluster auto scaling group"
+  description = "Minimum number of worker nodes in the cluster auto scaling group"
 }
 
 variable "node_instance_type" {
