@@ -91,6 +91,15 @@ resource "aws_security_group_rule" "eks-cluster-ingress-node-https" {
 }
 
 ### Worker Node AutoScaling Group
+locals {
+  eks-node-userdata = <<USERDATA
+#!/bin/bash
+set -o xtrace
+
+/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks-master.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks-master.certificate_authority.0.data}' '${var.cluster_name}'
+USERDATA
+}
+
 data "aws_ami" "eks-worker-ami" {
   filter {
     name   = "name"
@@ -101,19 +110,10 @@ data "aws_ami" "eks-worker-ami" {
   owners      = ["602401143452"] # Amazon Account ID
 }
 
-locals {
-  eks-node-userdata = <<USERDATA
-#!/bin/bash
-set -o xtrace
-
-/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks-master.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks-master.certificate_authority.0.data}' '${var.cluster_name}'
-USERDATA
-}
-
 resource "aws_launch_configuration" "eks-worker-cluster" {
   associate_public_ip_address = true
   iam_instance_profile        = "${aws_iam_instance_profile.eks-worker.name}"
-  image_id                    = "${data.aws_ami.eks-worker-ami.id}"
+  image_id                    = "${var.node_ami_id != "" ? var.node_ami_id : data.aws_ami.eks-worker-ami.id}"
   instance_type               = "${var.node_instance_type}"
   name_prefix                 = "eks-cluster"
   security_groups             = ["${aws_security_group.eks-worker.id}"]

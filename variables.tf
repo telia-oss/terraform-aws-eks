@@ -38,3 +38,9 @@ variable "node_instance_type" {
   type        = "string"
   description = "Type of EC2 instances to be used in the cluster"
 }
+
+variable "node_ami_id" {
+  type        = "string"
+  description = "AMI ID to use for worker nodes"
+  default     = ""
+}
