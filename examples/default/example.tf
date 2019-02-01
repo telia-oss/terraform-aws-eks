@@ -53,14 +53,25 @@ resource "aws_route_table_association" "route-table-association" {
 }
 
 module "eks" {
-  source             = "../.."
-  vpc_id             = "${aws_vpc.vpc.id}"
-  subnet_ids         = ["${aws_subnet.public.*.id}"]
-  cluster_name       = "${local.cluster_name}"
-  desired_nodes      = "3"
-  max_nodes          = "6"
-  min_nodes          = "1"
-  node_instance_type = "m5.large"
+  source       = "../.."
+  vpc_id       = "${aws_vpc.vpc.id}"
+  subnet_ids   = ["${aws_subnet.public.*.id}"]
+  cluster_name = "${local.cluster_name}"
+
+  nodes = [
+    {
+      desired_nodes = "1"
+      max_nodes     = "1"
+      min_nodes     = "1"
+      instance_type = "m5.large"
+    },
+    {
+      desired_nodes = "1"
+      max_nodes     = "1"
+      min_nodes     = "1"
+      instance_type = "m5.xlarge"
+    },
+  ]
 }
 
 output "eks_platform_version" {

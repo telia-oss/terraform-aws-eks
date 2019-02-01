@@ -111,10 +111,11 @@ data "aws_ami" "eks-worker-ami" {
 }
 
 resource "aws_launch_configuration" "eks-worker-cluster" {
+  count                       = "${length(var.nodes)}"
   associate_public_ip_address = true
   iam_instance_profile        = "${aws_iam_instance_profile.eks-worker.name}"
   image_id                    = "${var.node_ami_id != "" ? var.node_ami_id : data.aws_ami.eks-worker-ami.id}"
-  instance_type               = "${var.node_instance_type}"
+  instance_type               = "${lookup(var.nodes[count.index], "instance_type")}"
   name_prefix                 = "eks-cluster"
   security_groups             = ["${aws_security_group.eks-worker.id}"]
   user_data_base64            = "${base64encode(local.eks-node-userdata)}"
@@ -125,11 +126,12 @@ resource "aws_launch_configuration" "eks-worker-cluster" {
 }
 
 resource "aws_autoscaling_group" "eks-worker-cluster" {
-  desired_capacity     = "${var.desired_nodes}"
-  max_size             = "${var.max_nodes}"
-  min_size             = "${var.min_nodes}"
-  launch_configuration = "${aws_launch_configuration.eks-worker-cluster.id}"
-  name                 = "${var.cluster_name}-eks-cluster"
+  count                = "${length(var.nodes)}"
+  desired_capacity     = "${lookup(var.nodes[count.index], "desired_nodes")}"
+  max_size             = "${lookup(var.nodes[count.index], "max_nodes")}"
+  min_size             = "${lookup(var.nodes[count.index], "min_nodes")}"
+  launch_configuration = "${aws_launch_configuration.eks-worker-cluster.*.id[count.index]}"
+  name                 = "${var.cluster_name}-eks-cluster-${count.index}"
   vpc_zone_identifier  = ["${var.subnet_ids}"]
 
   tag {

@@ -18,25 +18,24 @@ variable "kubernetes_version" {
   description = "Kubernetes version"
 }
 
-variable "desired_nodes" {
-  type        = "string"
-  description = "Desired number of worker nodes in the cluster auto scaling group"
-}
+variable "nodes" {
+  type = "list"
 
-variable "max_nodes" {
-  type        = "string"
-  description = "Maximum number of worker nodes in the cluster auto scaling group"
-}
-
-variable "min_nodes" {
-  type        = "string"
-  description = "Minimum number of worker nodes in the cluster auto scaling group"
-}
-
-variable "node_instance_type" {
-  default     = "m5.large"
-  type        = "string"
-  description = "Type of EC2 instances to be used in the cluster"
+  description = <<EOF
+List of maps, e.g:
+{
+  desired_nodes = "1"
+  max_nodes     = "1"
+  min_nodes     = "1"
+  instance_type = "m5.large"
+},
+{
+  desired_nodes = "1"
+  max_nodes     = "1"
+  min_nodes     = "1"
+  instance_type = "m5.xlarge"
+},
+EOF
 }
 
 variable "node_ami_id" {
