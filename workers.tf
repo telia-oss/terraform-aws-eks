@@ -61,7 +61,7 @@ resource "aws_security_group" "eks-worker" {
 
 resource "aws_security_group_rule" "eks-worker-ingress-self" {
   description              = "Allow node to communicate with each other"
-  from_port                = 0
+  from_port                = 1025
   protocol                 = "-1"
   security_group_id        = "${aws_security_group.eks-worker.id}"
   source_security_group_id = "${aws_security_group.eks-worker.id}"
@@ -79,13 +79,13 @@ resource "aws_security_group_rule" "eks-worker-ingress-cluster" {
   type                     = "ingress"
 }
 
-### Worker Node Access to EKS Master Cluster
+### Worker Node Access to EKS Master
 resource "aws_security_group_rule" "eks-cluster-ingress-node-https" {
   description              = "Allow pods to communicate with the cluster API Server"
   from_port                = 443
   protocol                 = "tcp"
   security_group_id        = "${aws_security_group.eks-worker.id}"
-  source_security_group_id = "${aws_security_group.eks-worker.id}"
+  source_security_group_id = "${aws_security_group.eks-master.id}"
   to_port                  = 443
   type                     = "ingress"
 }
