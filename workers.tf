@@ -97,6 +97,8 @@ locals {
 set -o xtrace
 
 /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks-master.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks-master.certificate_authority.0.data}' '${var.cluster_name}'
+
+${var.extend_node_user_data}
 USERDATA
 }
 
