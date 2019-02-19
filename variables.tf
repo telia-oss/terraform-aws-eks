@@ -43,3 +43,7 @@ variable "node_ami_id" {
   description = "AMI ID to use for worker nodes"
   default     = ""
 }
+
+variable "extend_node_user_data" {
+  default = ""
+}
