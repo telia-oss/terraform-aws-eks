@@ -111,13 +111,13 @@ data "aws_ami" "eks-worker-ami" {
 }
 
 resource "aws_launch_configuration" "eks-worker-cluster" {
-  count                       = "${length(var.nodes)}"
-  iam_instance_profile        = "${aws_iam_instance_profile.eks-worker.name}"
-  image_id                    = "${var.node_ami_id != "" ? var.node_ami_id : data.aws_ami.eks-worker-ami.id}"
-  instance_type               = "${lookup(var.nodes[count.index], "instance_type")}"
-  name_prefix                 = "eks-cluster"
-  security_groups             = ["${aws_security_group.eks-worker.id}"]
-  user_data_base64            = "${base64encode(local.eks-node-userdata)}"
+  count                = "${length(var.nodes)}"
+  iam_instance_profile = "${aws_iam_instance_profile.eks-worker.name}"
+  image_id             = "${var.node_ami_id != "" ? var.node_ami_id : data.aws_ami.eks-worker-ami.id}"
+  instance_type        = "${lookup(var.nodes[count.index], "instance_type")}"
+  name_prefix          = "eks-cluster"
+  security_groups      = ["${aws_security_group.eks-worker.id}"]
+  user_data_base64     = "${base64encode(local.eks-node-userdata)}"
 
   lifecycle {
     create_before_destroy = true
