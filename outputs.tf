@@ -52,3 +52,11 @@ output "eks_master_security_group_id" {
 output "eks_master_security_group_arn" {
   value = "${aws_security_group.eks-master.arn}"
 }
+
+output "eks_worker_autoscaling_group_ids" {
+  value = "${aws_autoscaling_group.eks-worker-cluster.*.id}"
+}
+
+output "eks_worker_autoscaling_group_arn" {
+  value = "${aws_autoscaling_group.eks-worker-cluster.*.arn}"
+}
