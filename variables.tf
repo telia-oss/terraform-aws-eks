@@ -1,25 +1,25 @@
 variable "cluster_name" {
-  type        = "string"
+  type        = string
   description = "Cluster name"
 }
 
 variable "vpc_id" {
-  type        = "string"
+  type        = string
   description = "VPC ID"
 }
 
 variable "subnet_ids" {
-  type = "list"
+  type = list(string)
 }
 
 // https://docs.aws.amazon.com/eks/latest/userguide/platform-versions.html
 variable "kubernetes_version" {
-  default     = ""                   // If empty, will use the newest
+  default     = "" // If empty, will use the newest
   description = "Kubernetes version"
 }
 
 variable "nodes" {
-  type = "list"
+  type = list(map(string))
 
   description = <<EOF
 List of maps, e.g:
@@ -36,14 +36,16 @@ List of maps, e.g:
   instance_type = "m5.xlarge"
 },
 EOF
+
 }
 
 variable "node_ami_id" {
-  type        = "string"
+  type = string
   description = "AMI ID to use for worker nodes"
-  default     = ""
+  default = ""
 }
 
 variable "extend_node_user_data" {
   default = ""
 }
+
