@@ -127,7 +127,7 @@ resource "aws_launch_configuration" "eks-worker-cluster" {
 }
 
 resource "aws_autoscaling_group" "eks-worker-cluster" {
-  count                = length(var.nodes[*])
+  count                = length(var.nodes)
   desired_capacity     = var.nodes[count.index]["desired_nodes"]
   max_size             = var.nodes[count.index]["max_nodes"]
   min_size             = var.nodes[count.index]["min_nodes"]
@@ -146,5 +146,18 @@ resource "aws_autoscaling_group" "eks-worker-cluster" {
     value               = "owned"
     propagate_at_launch = true
   }
+
+  tag {
+    key                 = "k8s.io/cluster-autoscaler/enabled"
+    value               = "true"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "k8s.io/cluster-autoscaler/${lookup(var.nodes[count.index], "autoscaler_group", var.cluster_name)}"
+    value               = "true"
+    propagate_at_launch = true
+  }
+ 
 }
 
