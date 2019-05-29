@@ -124,6 +124,10 @@ resource "aws_launch_configuration" "eks-worker-cluster" {
   lifecycle {
     create_before_destroy = true
   }
+
+  root_block_device {
+    volume_size = lookup(var.nodes[count.index], "volume_size", 20)
+  }
 }
 
 resource "aws_autoscaling_group" "eks-worker-cluster" {
