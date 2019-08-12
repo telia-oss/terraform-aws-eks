@@ -21,17 +21,17 @@ POLICY
 
 resource "aws_iam_role_policy_attachment" "eks-worker-AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role = aws_iam_role.eks-worker.name
+  role       = aws_iam_role.eks-worker.name
 }
 
 resource "aws_iam_role_policy_attachment" "eks-worker-AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role = aws_iam_role.eks-worker.name
+  role       = aws_iam_role.eks-worker.name
 }
 
 resource "aws_iam_role_policy_attachment" "eks-worker-AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role = aws_iam_role.eks-worker.name
+  role       = aws_iam_role.eks-worker.name
 }
 
 resource "aws_iam_instance_profile" "eks-worker" {
@@ -41,52 +41,52 @@ resource "aws_iam_instance_profile" "eks-worker" {
 
 ### Worker Node security groups
 resource "aws_security_group" "eks-worker" {
-  name = "${var.cluster_name}-eks-worker"
+  name        = "${var.cluster_name}-eks-worker"
   description = "Security group for all nodes in the cluster"
-  vpc_id = var.vpc_id
+  vpc_id      = var.vpc_id
 
   egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    "Name" = "${var.cluster_name}-eks-worker"
+    "Name"                                      = "${var.cluster_name}-eks-worker"
     "kubernetes.io/cluster/${var.cluster_name}" = "owned"
   }
 }
 
 resource "aws_security_group_rule" "eks-worker-ingress-self" {
-  description = "Allow node to communicate with each other"
-  from_port = 0
-  protocol = "-1"
-  security_group_id = aws_security_group.eks-worker.id
+  description              = "Allow node to communicate with each other"
+  from_port                = 0
+  protocol                 = "-1"
+  security_group_id        = aws_security_group.eks-worker.id
   source_security_group_id = aws_security_group.eks-worker.id
-  to_port = 65535
-  type = "ingress"
+  to_port                  = 65535
+  type                     = "ingress"
 }
 
 resource "aws_security_group_rule" "eks-worker-ingress-cluster" {
-  description = "Allow worker Kubelets and pods to receive communication from the cluster control plane"
-  from_port = 1025
-  protocol = "tcp"
-  security_group_id = aws_security_group.eks-worker.id
+  description              = "Allow worker Kubelets and pods to receive communication from the cluster control plane"
+  from_port                = 1025
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.eks-worker.id
   source_security_group_id = aws_security_group.eks-master.id
-  to_port = 65535
-  type = "ingress"
+  to_port                  = 65535
+  type                     = "ingress"
 }
 
 ### Worker Node Access to EKS Master
 resource "aws_security_group_rule" "eks-cluster-ingress-node-https" {
-  description = "Allow pods to communicate with the cluster API Server"
-  from_port = 443
-  protocol = "tcp"
-  security_group_id = aws_security_group.eks-worker.id
+  description              = "Allow pods to communicate with the cluster API Server"
+  from_port                = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.eks-worker.id
   source_security_group_id = aws_security_group.eks-master.id
-  to_port = 443
-  type = "ingress"
+  to_port                  = 443
+  type                     = "ingress"
 }
 
 ### Worker Node AutoScaling Group
@@ -138,6 +138,7 @@ resource "aws_autoscaling_group" "eks-worker-cluster" {
   launch_configuration = aws_launch_configuration.eks-worker-cluster[count.index].id
   name                 = "${var.cluster_name}-eks-cluster-${count.index}"
   vpc_zone_identifier  = var.subnet_ids
+  target_group_arns    = var.alb_target_group_arns
 
   tag {
     key                 = "Name"
@@ -162,6 +163,6 @@ resource "aws_autoscaling_group" "eks-worker-cluster" {
     value               = "true"
     propagate_at_launch = true
   }
- 
+
 }
 

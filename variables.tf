@@ -40,12 +40,16 @@ EOF
 }
 
 variable "node_ami_id" {
-  type = string
+  type        = string
   description = "AMI ID to use for worker nodes"
-  default = ""
+  default     = ""
 }
 
 variable "extend_node_user_data" {
   default = ""
 }
 
+variable "alb_target_group_arns" {
+  type    = list(string)
+  default = []
+}
