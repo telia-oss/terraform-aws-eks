@@ -53,3 +53,9 @@ variable "alb_target_group_arns" {
   type    = list(string)
   default = []
 }
+
+variable "enabled_cluster_log_types" {
+  type    = list(string)
+  default = []
+}
+

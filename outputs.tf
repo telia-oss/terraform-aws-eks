@@ -22,6 +22,10 @@ output "eks_platform_version" {
   value = aws_eks_cluster.eks-master.platform_version
 }
 
+output "oidc_issuer" {
+  value = aws_eks_cluster.eks-master.identity.0.oidc.0.issuer
+}
+
 output "eks_worker_iam_role_id" {
   value = aws_iam_role.eks-worker.id
 }
@@ -61,4 +65,3 @@ output "eks_worker_autoscaling_group_ids" {
 output "eks_worker_autoscaling_group_arn" {
   value = aws_autoscaling_group.eks-worker-cluster.*.arn
 }
-
