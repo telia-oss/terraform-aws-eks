@@ -126,7 +126,7 @@ resource "aws_launch_configuration" "eks-worker-cluster" {
   }
 
   root_block_device {
-    volume_size = lookup(var.nodes[count.index], "volume_size", 20)
+    volume_size = lookup(var.nodes[count.index], "volume_size", 30)
   }
 }
 
