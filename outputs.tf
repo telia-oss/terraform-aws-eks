@@ -65,3 +65,8 @@ output "eks_worker_autoscaling_group_ids" {
 output "eks_worker_autoscaling_group_arn" {
   value = aws_autoscaling_group.eks-worker-cluster.*.arn
 }
+
+output "eks_version" {
+  value       = aws_eks_cluster.eks-master.version
+  description = "The Kubernetes server version for the cluster."
+}

@@ -102,20 +102,14 @@ locals {
 
 }
 
-data "aws_ami" "eks-worker-ami" {
-  filter {
-    name   = "name"
-    values = ["amazon-eks-node-v*"]
-  }
-
-  most_recent = true
-  owners      = ["602401143452"] # Amazon Account ID
+data "aws_ssm_parameter" "eks_worker_ami" {
+  name = "/aws/service/eks/optimized-ami/${regex("[\\d]*.[\\d]*", aws_eks_cluster.eks-master.version)}/amazon-linux-2/recommended/image_id"
 }
 
 resource "aws_launch_configuration" "eks-worker-cluster" {
   count                = length(var.nodes)
   iam_instance_profile = aws_iam_instance_profile.eks-worker.name
-  image_id             = var.node_ami_id != "" ? var.node_ami_id : data.aws_ami.eks-worker-ami.id
+  image_id             = var.node_ami_id != "" ? var.node_ami_id : data.aws_ssm_parameter.eks_worker_ami.value
   instance_type        = var.nodes[count.index]["instance_type"]
   name_prefix          = "eks-cluster"
   security_groups      = [aws_security_group.eks-worker.id]
@@ -126,7 +120,7 @@ resource "aws_launch_configuration" "eks-worker-cluster" {
   }
 
   root_block_device {
-    volume_size = lookup(var.nodes[count.index], "volume_size", 20)
+    volume_size = lookup(var.nodes[count.index], "volume_size", 30)
   }
 }
 
