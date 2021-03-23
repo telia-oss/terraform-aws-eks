@@ -1,6 +1,5 @@
 provider "aws" {
-  region  = "eu-west-1"
-  version = ">= 2.10"
+  region = "eu-west-1"
 }
 
 data "aws_availability_zones" "available" {
